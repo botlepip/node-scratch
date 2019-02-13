@@ -1,23 +1,22 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
+const path = require("path");
 
-const aboutPage = fs.readFile("about.html", file => {});
-const contactPage = fs.readFile("contact.html", file => {});
-const homePage = fs.readFile("index.html", file => {});
+const app = express();
 
-const server = http.createServer((req, res) => {
-  console.log(req.url);
+app.use(express.static("public"));
 
-  if (req.url === "/about") {
-    return res.end(aboutPage);
-  } else if (req.url === "/contact") {
-    return res.end(contactPage);
-  } else if (req.url === "/") {
-    return res.end(homePage);
-  } else {
-    res.writeHead(404);
-    res.end("the page was not found");
-  }
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "index.html"));
+});
+app.get("/about", (req, res) => {
+  res.send({
+    name: "tue nguyen"
+  });
+});
+app.get("/contact", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "contact.html"));
 });
 
-server.listen(3000);
+app.listen(3000, () => {
+  console.log("listening on port 3000");
+});
